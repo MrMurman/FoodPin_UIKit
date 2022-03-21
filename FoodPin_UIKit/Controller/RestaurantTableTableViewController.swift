@@ -15,8 +15,32 @@ class RestaurantTableTableViewController: UITableViewController {
     
     // MARK: - View controller life cycle
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.hidesBarsOnSwipe = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let appearance = navigationController?.navigationBar.standardAppearance {
+            
+            appearance.configureWithTransparentBackground()
+            
+            if let customFont = UIFont(name: "Nunito-Bold", size: 45.0) {
+//                appearance.titleTextAttributes = [.foregroundColor: UIColor(red: 218, green: 96, blue: 51, alpha: 1.0)]
+//                appearance.largeTitleTextAttributes = [.foregroundColor: UIColor(red: 218, green: 96, blue: 51, alpha: 1.0), .font: customFont]
+                appearance.titleTextAttributes = [.foregroundColor: UIColor(named: "NavigationBarTitle")!]
+                appearance.largeTitleTextAttributes = [.foregroundColor: UIColor(named: "NavigationBarTitle")!, .font: customFont]
+            }
+            
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.compactAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        }
+        
+        navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.cellLayoutMarginsFollowReadableWidth = true
 
