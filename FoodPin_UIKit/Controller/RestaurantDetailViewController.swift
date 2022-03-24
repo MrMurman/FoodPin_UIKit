@@ -49,11 +49,60 @@ class RestaurantDetailViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+            
+        case "showMap":
+            let destinationController = segue.destination as! MapViewController
+            
+            guard let restaurant = restaurant else {
+                return
+            }
+            destinationController.restaurant = restaurant
+        
+        case "showReview":
+            let destinationController = segue.destination as! ReviewViewController
+            
+            guard let restaurant = restaurant else {
+                return
+            }
+            
+            destinationController.restaurant = restaurant
+            
+        default: break
+        }
+    }
+    
+    @IBAction func close(segue: UIStoryboardSegue) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func rateRestaurant(segue: UIStoryboardSegue) {
+        guard let identifier = segue.identifier else {return}
+        
+        dismiss(animated: true) {
+            if let rating = Restaurant.Rating(rawValue: identifier) {
+                self.restaurant?.rating = rating
+                self.headerView.ratingImageView.image = UIImage(named: rating.image)
+                
+                let scaleTransform = CGAffineTransform.init(scaleX: 0.1, y: 0.1)
+                self.headerView.ratingImageView.transform = scaleTransform
+                self.headerView.ratingImageView.alpha = 0
+                
+                UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.3, initialSpringVelocity: 0.7, options: []) {
+                    self.headerView.ratingImageView.transform = .identity
+                    self.headerView.ratingImageView.alpha = 1.0
+                }
+            }
+        }
+    }
 }
 
 
 
-
+// MARK: - DataSource Ext
 extension RestaurantDetailViewController: UITableViewDataSource, UITableViewDelegate {
     
     
@@ -102,14 +151,4 @@ extension RestaurantDetailViewController: UITableViewDataSource, UITableViewDele
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showMap" {
-            let destinationController = segue.destination as! MapViewController
-            
-            guard let restaurant = restaurant else {
-                return
-            }
-            destinationController.restaurant = restaurant
-        }
-    }
 }

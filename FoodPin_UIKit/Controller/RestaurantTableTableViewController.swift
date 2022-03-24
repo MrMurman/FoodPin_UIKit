@@ -10,6 +10,7 @@ import UIKit
 class RestaurantTableTableViewController: UITableViewController {
     
     var restaurants = Restaurant.sampleData
+    //var restaurants: [Restaurant] = []
     
     lazy var dataSource = configureDataSource()
     
@@ -204,6 +205,10 @@ class RestaurantTableTableViewController: UITableViewController {
                 destinationController.restaurant = self.restaurants[indexPath.row]
             }
         }
+    }
+    
+    @IBAction func unwindToHome(segue: UIStoryboardSegue) {
+        dismiss(animated: true, completion: nil)
     }
    
 }
