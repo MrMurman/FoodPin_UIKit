@@ -17,6 +17,7 @@
 		6F06930A27E9F0640028E79F /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F06930927E9F0640028E79F /* ReviewViewController.swift */; };
 		6F06930C27EB0E2A0028E79F /* RoundedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F06930B27EB0E2A0028E79F /* RoundedTextField.swift */; };
 		6F06930E27EB11750028E79F /* NewRestaurantController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F06930D27EB11750028E79F /* NewRestaurantController.swift */; };
+		6F17214C27EC9C2000ECB177 /* FoodPin_UIKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6F17214A27EC9C2000ECB177 /* FoodPin_UIKit.xcdatamodeld */; };
 		6F98377127E1DF230087535F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F98377027E1DF230087535F /* AppDelegate.swift */; };
 		6F98377327E1DF230087535F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F98377227E1DF230087535F /* SceneDelegate.swift */; };
 		6F98377827E1DF230087535F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F98377627E1DF230087535F /* Main.storyboard */; };
@@ -43,6 +44,7 @@
 		6F06930927E9F0640028E79F /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
 		6F06930B27EB0E2A0028E79F /* RoundedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedTextField.swift; sourceTree = "<group>"; };
 		6F06930D27EB11750028E79F /* NewRestaurantController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRestaurantController.swift; sourceTree = "<group>"; };
+		6F17214B27EC9C2000ECB177 /* FoodPin_UIKit.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FoodPin_UIKit.xcdatamodel; sourceTree = "<group>"; };
 		6F98376D27E1DF230087535F /* FoodPin_UIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodPin_UIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F98377027E1DF230087535F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6F98377227E1DF230087535F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				6F98377927E1DF250087535F /* Assets.xcassets */,
 				6F98379227E4C94B0087535F /* Resources */,
 				6F98377E27E1DF250087535F /* Info.plist */,
+				6F17214A27EC9C2000ECB177 /* FoodPin_UIKit.xcdatamodeld */,
 			);
 			path = FoodPin_UIKit;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 				6F98377127E1DF230087535F /* AppDelegate.swift in Sources */,
 				6F06930627E8C79E0028E79F /* RestaurantDetailMapCell.swift in Sources */,
 				6F98378F27E462080087535F /* RestaurantDiffableDataSource.swift in Sources */,
+				6F17214C27EC9C2000ECB177 /* FoodPin_UIKit.xcdatamodeld in Sources */,
 				6F06930C27EB0E2A0028E79F /* RoundedTextField.swift in Sources */,
 				6F98379127E4B88B0087535F /* RestaurantDetailViewController.swift in Sources */,
 				6F98379927E4CE130087535F /* RestaurantDetailHeaderView.swift in Sources */,
@@ -492,6 +496,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		6F17214A27EC9C2000ECB177 /* FoodPin_UIKit.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6F17214B27EC9C2000ECB177 /* FoodPin_UIKit.xcdatamodel */,
+			);
+			currentVersion = 6F17214B27EC9C2000ECB177 /* FoodPin_UIKit.xcdatamodel */;
+			path = FoodPin_UIKit.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6F98376527E1DF230087535F /* Project object */;
 }

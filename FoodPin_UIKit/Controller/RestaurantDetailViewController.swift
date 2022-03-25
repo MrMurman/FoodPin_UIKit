@@ -37,10 +37,14 @@ class RestaurantDetailViewController: UIViewController {
             return
         }
         
+        if let rating = restaurant.rating {
+            headerView.ratingImageView.image = UIImage(named: rating.image)
+        }
+        
         // Configure header view
         headerView.nameLabel.text = restaurant.name
         headerView.typeLabel.text = restaurant.type
-        headerView.headerImageView.image = UIImage(named: restaurant.image)
+        headerView.headerImageView.image = UIImage(data: restaurant.image)
         
         let heartImage = restaurant.isFavourite ? "heart.fill" : "heart"
         headerView.heartButton.setImage(UIImage(systemName: heartImage), for: .normal)
@@ -48,6 +52,17 @@ class RestaurantDetailViewController: UIViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    @IBAction func heartButtonPressed() {
+        
+        if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
+            if let restaurant = restaurant {
+                restaurant.isFavourite.toggle()
+                headerView.heartButton.setImage(UIImage(systemName: restaurant.isFavourite ? "heart.fill" : "heart"), for: .normal)
+                appDelegate.saveContext()
+            }
+        }
     }
     
     // MARK: - Navigation
@@ -87,6 +102,10 @@ class RestaurantDetailViewController: UIViewController {
                 self.restaurant?.rating = rating
                 self.headerView.ratingImageView.image = UIImage(named: rating.image)
                 
+                if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
+                    appDelegate.saveContext()
+                }
+                
                 let scaleTransform = CGAffineTransform.init(scaleX: 0.1, y: 0.1)
                 self.headerView.ratingImageView.transform = scaleTransform
                 self.headerView.ratingImageView.alpha = 0
@@ -120,7 +139,7 @@ extension RestaurantDetailViewController: UITableViewDataSource, UITableViewDele
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: RestaurantDetailTextCell.self), for: indexPath) as! RestaurantDetailTextCell
             
-            cell.descriptionLabel.text = restaurant.description
+            cell.descriptionLabel.text = restaurant.summary
             
             return cell
             

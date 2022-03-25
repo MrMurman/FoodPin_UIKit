@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class NewRestaurantController: UITableViewController {
 
@@ -53,6 +54,8 @@ class NewRestaurantController: UITableViewController {
             photoImageView.layer.masksToBounds = true
         }
     }
+    
+    var restaurant: Restaurant!
     
     // MARK: - Lifecycle
     
@@ -106,6 +109,45 @@ class NewRestaurantController: UITableViewController {
                 Phone: \(phone)
                 Description: \(description)
                 """)
+            
+            if name == "Sample" {
+                let sampleRestaurants = Restaurant.RestaurantStruct.sampleData
+                
+                if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
+                    for sample in sampleRestaurants {
+                        restaurant = Restaurant(context: appDelegate.persistentContainer.viewContext)
+                        restaurant.name = sample.name
+                        restaurant.type = sample.type
+                        restaurant.location = sample.location
+                        restaurant.phone = sample.phone
+                        restaurant.summary = sample.description
+                        restaurant.isFavourite = false
+                        restaurant.image = (UIImage(named: sample.image)?.pngData())!
+                        
+                        print("Saving data to context")
+                        appDelegate.saveContext()
+                    }
+                }
+            } else {
+                
+                if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
+                    restaurant = Restaurant(context: appDelegate.persistentContainer.viewContext)
+                    restaurant.name = name
+                    restaurant.type = type
+                    restaurant.location = location
+                    restaurant.phone = phone
+                    restaurant.summary = description
+                    restaurant.isFavourite = false
+                    
+                    if let imageData = photoImageView.image?.pngData() {
+                        restaurant.image = imageData
+                    }
+                    
+                    print("Saving data to context")
+                    appDelegate.saveContext()
+                }
+            }
+            
             
             dismiss(animated: true, completion: nil)
         } else {

@@ -6,11 +6,15 @@
 //
 
 import UIKit
+import CoreData
 
 class RestaurantTableTableViewController: UITableViewController {
     
-    var restaurants = Restaurant.sampleData
-    //var restaurants: [Restaurant] = []
+    @IBOutlet var emptyRestaurantView: UIView!
+    
+    //var restaurants = Restaurant.sampleData
+    var restaurants: [Restaurant] = []
+    var fetchResultController: NSFetchedResultsController<Restaurant>!
     
     lazy var dataSource = configureDataSource()
     
@@ -25,6 +29,7 @@ class RestaurantTableTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Set-up appearance
         if let appearance = navigationController?.navigationBar.standardAppearance {
             
             appearance.configureWithTransparentBackground()
@@ -45,15 +50,59 @@ class RestaurantTableTableViewController: UITableViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.cellLayoutMarginsFollowReadableWidth = true
 
+        // Prepare the empty view
+        tableView.backgroundView = emptyRestaurantView
+        tableView.backgroundView?.isHidden = restaurants.count == 0 ? false : true
+        
+        // Set-up data source
         tableView.dataSource = dataSource
         tableView.separatorStyle = .none
         
+        fetchRestaurantData()
+        
+//        var snapshot = NSDiffableDataSourceSnapshot<Section, Restaurant>()
+//        snapshot.appendSections([.all])
+//        snapshot.appendItems(restaurants, toSection: .all)
+//
+//        dataSource.apply(snapshot, animatingDifferences: false)
+    
+    }
+    
+    // MARK: - Core Data
+    
+    func fetchRestaurantData() {
+        // Fetch data from data store
+        let fetchRequest: NSFetchRequest<Restaurant> = Restaurant.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
+            let context = appDelegate.persistentContainer.viewContext
+            fetchResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+            fetchResultController.delegate = self
+            
+            do {
+                try fetchResultController.performFetch()
+                updateSnapshot()
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    func updateSnapshot(animatingChange: Bool = false) {
+        if let fetchedObjects = fetchResultController.fetchedObjects {
+            restaurants = fetchedObjects
+        }
+        
+        // Create a snapshot and populate the data
         var snapshot = NSDiffableDataSourceSnapshot<Section, Restaurant>()
         snapshot.appendSections([.all])
         snapshot.appendItems(restaurants, toSection: .all)
         
-        dataSource.apply(snapshot, animatingDifferences: false)
-    
+        dataSource.apply(snapshot, animatingDifferences: animatingChange)
+        
+        tableView.backgroundView?.isHidden = restaurants.count == 0 ? false : true
     }
 
     // MARK: - UITableViewDelegate Protocol
@@ -108,9 +157,20 @@ class RestaurantTableTableViewController: UITableViewController {
         // Delete action
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, sourceView, completionHandler) in
             
-            var snapshot = self.dataSource.snapshot()
-            snapshot.deleteItems([restaurant])
-            self.dataSource.apply(snapshot, animatingDifferences: true)
+            if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
+                let context = appDelegate.persistentContainer.viewContext
+                
+                // Delete the item
+                context.delete(restaurant)
+                appDelegate.saveContext()
+                
+                // Update the view
+                self.updateSnapshot(animatingChange: true)
+            }
+            
+//            var snapshot = self.dataSource.snapshot()
+//            snapshot.deleteItems([restaurant])
+//            self.dataSource.apply(snapshot, animatingDifferences: true)
             
             // Call completion handler to dismiss the action button
             completionHandler(true)
@@ -123,7 +183,7 @@ class RestaurantTableTableViewController: UITableViewController {
             
             let activityController: UIActivityViewController
             
-            if let imageToShare = UIImage(named: restaurant.image) {
+            if let imageToShare = UIImage(data: restaurant.image) {
                 activityController = UIActivityViewController(activityItems: [defaultText, imageToShare], applicationActivities: nil)
             } else {
                 activityController = UIActivityViewController(activityItems: [defaultText], applicationActivities: nil)
@@ -188,7 +248,7 @@ class RestaurantTableTableViewController: UITableViewController {
                 cell.nameLabel.text = restaurant.name
                 cell.locationLabel.text = restaurant.location
                 cell.typeLabel.text = restaurant.type
-                cell.thumbnailImageView.image = UIImage(named: restaurant.image)
+                cell.thumbnailImageView.image = UIImage(data: restaurant.image)
                 cell.imageHeart.isHidden = restaurant.isFavourite ? false : true
             
                 return cell
@@ -211,4 +271,14 @@ class RestaurantTableTableViewController: UITableViewController {
         dismiss(animated: true, completion: nil)
     }
    
+}
+
+
+// MARK: - Extensions
+
+extension RestaurantTableTableViewController: NSFetchedResultsControllerDelegate{
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        updateSnapshot()
+    }
 }
