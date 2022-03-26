@@ -426,7 +426,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="itO-hN-2LA">
                         <barButtonItem key="rightBarButtonItem" image="heart" catalog="system" width="100" style="plain" id="mQ6-hc-wJu">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="9R2-U4-Ox3">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="9R2-U4-Ox3">
                                 <rect key="frame" x="303.33333333333331" y="0.0" width="70.666666666666686" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
